@@ -15,20 +15,13 @@ function Home(){
         alert(searchQuery)
     }
     return (
-        <div className="home">
-            <form onSubmit={handleSearch} className="Search-bar">
-                <input 
-                type="text" 
-                placeholder="Search Anime Titles" 
-                className="search-input"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                ></input>
-                
-                <button  type="submit" className="bg-violet-400">Search</button>
-            </form>
+        <div className="flex flex-col grow items-center gap-6">
+            
+            <div className=" flex  text-3xl m-3 p-3 font-sans font-bold drop-shadow-2xl ">
+                <h1>Anime List</h1>
+            </div>
 
-            <div className="movie-grid">
+            <div className="flex flex-row justify-center gap-6 items-center">
                 {
                     animes.map( (anime) => (
                         <AnimeCard anime={anime} key={anime.id} />

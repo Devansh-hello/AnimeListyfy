@@ -1,37 +1,19 @@
 
 import { Link } from "react-router-dom"
 import { useState } from "react"
-import { searchAnime } from "../services/api";
 
-function NavBar(){
+
+function NavBar({ onSearch }){
     const [searchQuery, setSearchQuery] = useState("");
 
-    const [animes, setAnime] = useState([]);
-
-    const [error, setError] = useState(null);
-
-    const [loading, setLoading] = useState(true)
-
+    
     const handleSearch = async (e) =>{
         e.preventDefault()
-        if(!searchQuery.trim()) return
-        if(loading) return
-
-        setLoading(true)
-        try{
-            const searchResults = await searchAnime(searchQuery)
-            setAnime(searchResults)
-            setError(null)
+        if (searchQuery.trim()) {
+            onSearch(searchQuery); 
+            setSearchQuery("");
+        }
         
-        }
-        catch(err){
-            console.log(err)
-            setError("failed to search Anime....")
-        }
-        finally{
-            setLoading(false)
-        }
-        setSearchQuery("")
     }
 
     return  (

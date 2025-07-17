@@ -4,7 +4,7 @@ import { getPopularAnime, searchAnime } from "../services/api";
 
 
 function Home(){
-    const [searchQuery, setSearchQuery] = useState("");
+    
 
     const [animes, setAnime] = useState([]);
 
@@ -27,10 +27,7 @@ function Home(){
         loadPopularAnime()
     },[])
 
-    const handleSearch = (e) =>{
-        e.preventDefault()
-        alert(searchQuery)
-    }
+    
     return (
         <div className="flex flex-col grow items-center gap-6">
             
@@ -38,13 +35,21 @@ function Home(){
                 <h1>Anime List</h1>
             </div>
 
-            <div className="flex flex-row justify-center gap-6 items-center flex-wrap">
+            {error && <div className="">{error}</div>}
+
+            {loading ? (
+                <div className="">
+                    loading.....
+                </div>
+            ):<div className="flex flex-row justify-center gap-6 items-center flex-wrap">
                 {
                     animes.map( (anime) => (
                         <AnimeCard anime={anime} key={anime.id} />
                     ))
                 }
-            </div>
+            </div>}
+
+            
 
         </div>
     )

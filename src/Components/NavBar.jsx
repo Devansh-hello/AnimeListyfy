@@ -1,12 +1,37 @@
 
 import { Link } from "react-router-dom"
 import { useState } from "react"
+import { searchAnime } from "../services/api";
 
 function NavBar(){
     const [searchQuery, setSearchQuery] = useState("");
-    const handleSearch = (e) =>{
-         e.preventDefault()
-        alert(searchQuery)
+
+    const [animes, setAnime] = useState([]);
+
+    const [error, setError] = useState(null);
+
+    const [loading, setLoading] = useState(true)
+
+    const handleSearch = async (e) =>{
+        e.preventDefault()
+        if(!searchQuery.trim()) return
+        if(loading) return
+
+        setLoading(true)
+        try{
+            const searchResults = await searchAnime(searchQuery)
+            setAnime(searchResults)
+            setError(null)
+        
+        }
+        catch(err){
+            console.log(err)
+            setError("failed to search Anime....")
+        }
+        finally{
+            setLoading(false)
+        }
+        setSearchQuery("")
     }
 
     return  (
@@ -34,7 +59,7 @@ function NavBar(){
                 
                 <div>
                     <form onSubmit={handleSearch} className="flex flex-row items-center justify-center bg-gray-900/10 bg border border-gray-400 rounded-full pb-4 pt-4 pl-20 pr-20 text-center shadow-lg shadow-amber-50/10 hover:scale-110 transition duration-180 delay-120">
-                        <input 
+                        <input   
                         type="text" 
                         placeholder="Search Anime Titles" 
                         className="focus:outline-0"

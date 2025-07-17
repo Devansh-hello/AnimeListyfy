@@ -1,14 +1,31 @@
 import AnimeCard from "../Components/AnimeCard"
-import { useState } from "react"
+import { useState, useEffect, use } from "react"
+import { getPopularAnime, searchAnime } from "../services/api";
+
 
 function Home(){
     const [searchQuery, setSearchQuery] = useState("");
 
-    const animes =[
-        {id:1, title: "One Piece", release_date: "1998", url: "https://cdn.myanimelist.net/images/anime/1168/148347l.webp"},
-        {id:2, title: "Demon Slayer", release_date: "2015", url: "https://cdn.myanimelist.net/images/anime/1168/148347l.webp"},
-        {id:3, title: "Mushoku Tensei", release_date: "2000", url: "https://cdn.myanimelist.net/images/anime/1168/148347l.webp"}
-    ]
+    const [animes, setAnime] = useState([]);
+
+    const [error, setError] = useState(null);
+
+    const [loading, setLoading] = useState(true)
+    
+    useEffect(() => {
+        const loadPopularAnime = async () =>{
+            try{
+                const popularAnime = await getPopularAnime()
+                setAnime(popularAnime)
+            }catch (err){
+                console.log(err)
+                setError("Failed to load.....")
+            }finally{
+                setLoading(false)
+            }
+        }
+        loadPopularAnime()
+    },[])
 
     const handleSearch = (e) =>{
         e.preventDefault()
@@ -21,7 +38,7 @@ function Home(){
                 <h1>Anime List</h1>
             </div>
 
-            <div className="flex flex-row justify-center gap-6 items-center">
+            <div className="flex flex-row justify-center gap-6 items-center flex-wrap">
                 {
                     animes.map( (anime) => (
                         <AnimeCard anime={anime} key={anime.id} />
